@@ -1,5 +1,6 @@
 title: "Stefan Nieuwenhuis"
-description: "Learning in public — ML, recommender systems, homelabs, and more."
+name: "Stefan Nieuwenhuis"
+description: "Learning in public – one system at a time."
 baseurl: ""
 url: "https://stefannieuwenhuis.github.io"
 remote_theme: mmistakes/minimal-mistakes@4.26.2
@@ -22,6 +23,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+      read_time: true
 
 markdown: kramdown
 kramdown:
@@ -29,3 +31,7 @@ kramdown:
   math_engine: mathjax
 
 include: ["_pages"]
+
+# Enable MathJax
+mathjax: true
+
