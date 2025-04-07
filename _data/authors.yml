@@ -5,10 +5,3 @@ stefan:
   avatar: "/assets/images/bio-photo.jpg"
   uri: "https://github.com/stefannieuwenhuis"
   email: "stefannhs@gmail.com"
-  links:
-    - label: "GitHub"
-      icon: "fab fa-github"
-      url: "https://github.com/stefannieuwenhuis"
-    - label: "LinkedIn"
-      icon: "fab fa-linkedin"
-      url: "https://linkedin.com/in/stefannhs
