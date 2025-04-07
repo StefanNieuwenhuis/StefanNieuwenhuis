@@ -1,7 +1,0 @@
-_site/
-.sass-cache/
-.jekyll-cache/
-*.gem
-*.rbc
-.bundle/
-vendor/
