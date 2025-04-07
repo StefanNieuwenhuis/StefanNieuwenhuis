@@ -2,6 +2,7 @@
 title: "Recommender From Scratch: Building, Monitoring, and Learning in Public"
 categories: recommender-system
 tags: [ml-engineering, recommender-systems, docker, fastapi, grafana, learning-in-public]
+author: stefan
 layout: single
 author_profile: true
 ---
