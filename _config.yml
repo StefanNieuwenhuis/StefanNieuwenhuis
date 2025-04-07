@@ -1,0 +1,31 @@
+title: "Stefan Nieuwenhuis"
+description: "Learning in public — ML, recommender systems, homelabs, and more."
+baseurl: ""
+url: "https://stefannieuwenhuis.github.io"
+theme: minimal-mistakes-jekyll
+remote_theme: mmistakes/minimal-mistakes
+
+plugins:
+  - jekyll-feed
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+collections:
+  posts:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
+
+include: ["_pages"]
