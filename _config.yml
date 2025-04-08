@@ -1,10 +1,15 @@
+remote_theme: "mmistakes/minimal-mistakes@master"
+minimal_mistakes_skin: "default" # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+
+search: true
+
+# site settings
+locale: "en-US"
 title: "Stefan Nieuwenhuis"
-name: "Stefan Nieuwenhuis"
+name: &name "Stefan Nieuwenhuis"
 description: "Learning in public – one system at a time."
 baseurl: ""
 url: "https://stefannieuwenhuis.github.io"
-remote_theme: mmistakes/minimal-mistakes@4.26.2
-
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
@@ -15,15 +20,35 @@ plugins:
 collections:
   posts:
     output: true
+  recsys:
+    output: true
+    permalink: /:collection/:path/
+
+category_archive:
+  type: liquid
+  path: /categories/
+
+tag_archive:
+  type: liquid
+  path: /tags/
 
 defaults:
+  # _posts
   - scope:
       path: ""
       type: posts
     values:
-      layout: single
+      layout: wide
       author_profile: true
       read_time: true
+  # _recsys
+  - scope:
+      path: ""
+      type: recsys
+    values:
+      layout: wide
+      author_profile: false
+      share: true
 
 markdown: kramdown
 kramdown:
