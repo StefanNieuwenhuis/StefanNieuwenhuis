@@ -11,6 +11,7 @@ description: "Learning in public – one system at a time."
 baseurl: ""
 url: "https://stefannieuwenhuis.github.io"
 plugins:
+  - jekyll-analytics
   - jekyll-feed
   - jekyll-remote-theme
   - jekyll-seo-tag
@@ -62,3 +63,7 @@ include: ["_pages"]
 # Enable MathJax
 mathjax: true
 
+jekyll_analytics:
+  GoogleAnalytics: G-Q3FZDP5YBX
+    id: UA-123-456
+    anonymizeIp: true

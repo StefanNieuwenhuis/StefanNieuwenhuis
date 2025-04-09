@@ -8,4 +8,5 @@ group :jekyll_plugins do
     gem "jekyll-paginate"
     gem "jekyll-include-cache"
     gem "jekyll-remote-theme"
+    gem "jekyll-analytics"
 end
