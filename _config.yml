@@ -64,7 +64,7 @@ mathjax: true
 
 # Analytics
 analytics:
-  provider               : # false (default), "google", "google-universal", "google-gtag", "custom"
+  provider               : "google" # false (default), "google", "google-universal", "google-gtag", "custom"
   google:
-    tracking_id          : G-Q3FZDP5YBX
+    tracking_id          : "G-Q3FZDP5YBX"
     anonymize_ip         : true #true, false (default)
