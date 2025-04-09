@@ -38,15 +38,16 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: wide
       author_profile: true
       read_time: true
+      share: true
+      related: true
   # _recsys
   - scope:
       path: ""
       type: recsys
     values:
-      layout: wide
+      layout: single
       author_profile: false
       share: true
 
