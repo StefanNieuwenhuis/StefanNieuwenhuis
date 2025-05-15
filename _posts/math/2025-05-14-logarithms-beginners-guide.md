@@ -1,7 +1,7 @@
 ---
 title: "What is a Logarithm? A Complete Beginner's Guide"
 description: "Learn what a logarithm is with this detailed, beginner-friendly guide. Understand the math, real-world uses, and why logarithms matter in fields like machine learning and data science."
-tags: [math, logarithm, beginner, machine learning, exponential growth, gaussian naive bayes, logarithms explained, logarithms definition, logarithms rules, logarithms properties]
+tags: [math, logarithm, beginner, machine learning, statistics, data science, artificial intelligence, logarithms explained, logarithms definition, logarithms rules, logarithms properties]
 ---
 
 If you’ve ever asked yourself, _"What is a logarithm, and why should I care?"_ —you’re in the right place. Whether you're a student, aspiring data scientist, or just curious about the math behind modern technology, this blog post will give you a solid understanding of logarithms.
