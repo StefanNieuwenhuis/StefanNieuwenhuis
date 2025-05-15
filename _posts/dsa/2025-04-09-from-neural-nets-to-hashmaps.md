@@ -12,6 +12,7 @@ tags:
   - blog
 date: 2025-04-09
 excerpt: "Hashmaps power everything from feature stores to caching layers. In this post, I explain why I’m revisiting them as a machine learning engineer."
+author_profile: true
 ---
 
 > *“You don’t really understand a concept until you’ve taught it.”*
