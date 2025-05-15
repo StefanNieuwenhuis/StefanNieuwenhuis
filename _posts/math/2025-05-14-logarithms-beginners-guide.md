@@ -188,6 +188,8 @@ Logarithms aren’t just abstract math — they're part of everyday technologies
 
 ## The 7 laws of logarithms
 
+The 7 laws (also called properties or identities) of logarithms are used to simplify, expand, or condense them. Depending on the situation, the laws can be applied to make computations easier.
+
 ### 1. Product rule
 
 $$\log(a\cdot b) = \log(a) + \log(b)$$
