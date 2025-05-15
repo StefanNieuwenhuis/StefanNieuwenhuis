@@ -5,6 +5,8 @@ This is my GitHub Pages blog built with [Jekyll](https://jekyllrb.com/) and the 
 ## Topics I blog about
 
 - 🧠 Data Structures & Algorithms
+- 🧮 Mathematics
+- 📠 Machine Learning Algorithms
 - 🤖 Recommender Systems
 - 🏠 Homelab & Kubernetes on bare metal
 

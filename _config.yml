@@ -16,7 +16,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-include-cache
-
+  - jekyll-image-size
 collections:
   posts:
     output: true
