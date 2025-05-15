@@ -49,7 +49,7 @@ Here, $$\log$$ stands for logarithm. The right side part of the arrow is read to
 - The argument $$x$$ is always a positive real number ($$x \in \mathbb{R} \;\vert\; x > 0$$).
 
 
-# Why do we use logarithms?
+## Why do we use logarithms?
 
 Logarithms show up all over math, science, engineering, and computing. Here’s why:
 
