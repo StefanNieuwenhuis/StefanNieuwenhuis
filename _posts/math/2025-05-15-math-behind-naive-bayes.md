@@ -2,7 +2,7 @@
 title: "The math behind Naive Bayes, a deep-dive"
 description: "Learn what a logarithm is with this detailed, beginner-friendly guide. Understand the math, real-world uses, and why logarithms matter in fields like machine learning and data science."
 tags: [math, logarithm, beginner, machine learning, statistics, data science, artificial intelligence, logarithms explained, logarithms definition, logarithms rules, logarithms properties]
-published: true
+published: false
 ---
 
 ## TL;DR
@@ -224,23 +224,3 @@ This is known as the [curse of dimensionality](https://www.datacamp.com/blog/cur
 The "naive" assumption circumvents this by treating each feature as conditionally independent given the class label:
 
 $$P(e_1, e_2,\dots,e_n\vert y) = \prod\limits_{i=1}^n P(e_i\vert H)\cdot P(H)$$
-
-
-
-
-
-
-
-
-
-
-### The Naive in Naive Bayes
-To sidestep this complexity, Naive Bayes introduces a powerful assumption:
-
-> All features are conditionally independent given the class label.
-
-In other words, once we know the class (e.g., Iris setosa or Iris versicolor), the value of one feature (like petal length) tells us nothing about another feature (like sepal width). Mathematically, this assumption simplifies the joint distribution into a product of individual probabilities:
-
-$$P(x_1, x_2, \dots,x_n\vert y) = P(x_1\vert y)\cdot P(x_1\vert y)\cdot\dots\cdot P(x_n\vert y)$$
-
-This simplification reduces computational complexity and makes it feasible to apply Bayes' Theorem in high-dimensional spaces.
