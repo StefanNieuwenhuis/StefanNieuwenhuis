@@ -148,7 +148,7 @@ Or, equivalently:
 
 $$P(A\vert B) = P(A)$$
 
-and
+, and
 
 $$P(B\vert A) = P(B)$$
 
@@ -205,22 +205,96 @@ Now that we understand how Bayes' Theorem updates our beliefs given evidence, we
 
 > How do we estimate $$P(e\vert H)$$ when $$e$$ is a high-dimensional feature vector?
 
-Given the hypothesis $$H$$, and dependent feature (or evidence) vector $$\begin{bmatrix}e_1 & \dots & e_n\end{bmatrix}$$, Bayes' Theorem states:
+Given the hypothesis $$H$$, and dependent feature (or evidence) vector $$\vec{e} = \begin{bmatrix}e_1 & \dots & e_n\end{bmatrix}$$, Bayes' Theorem states:
 
-$$P(H\vert e_1, \dots, e_n) = \frac{(e_1, \dots, e_n \vert H)\cdot P(H)}{P(e_1, \dots, e_n)}$$
+$$P(H\vert e_1 \cap e_2 \cap \dots\cap e_n) = \frac{(e_1 \cap e_2 \cap \dots\cap e_n \vert H)\cdot P(H)}{P(e_1 \cap e_2 \cap \dots\cap e_n)}$$
 
-In high-dimensional spaces, modelling the full joint probability distribution $$P(e_1, e_2,\dots,e_n\vert H)$$ becomes often computationally intractable, especially with limited training data.
+In high-dimensional spaces, modelling this full joint probability distribution $$P(e_1 \cap e_2 \cap \dots\cap e_n\vert H)$$ becomes often computationally intractable, especially with limited training data.
 
 ### Why is it hard?
 
-The number of parameters required to model a joint distribution grows **exponentially** with the number of features in a dataset. For example, suppose we wanted to model dependenceis between just 100 binary features conditioned on a class label. This would require estimating probabilities for $$2^{100}$$ possible feature combinations per class - an astronomically large number (<small>$$1,2676506002×10^{30}$$</small>). Even for continuous features, estimating a full, multivariate distribution requires computing high-dimensional covariance matrices, and ensuring they are invertible and well-conditions. These tasks are computationally expensive and statistically fragile unless we have massive datasets.
+The number of parameters required to model a joint distribution grows **exponentially** with the number of features in a dataset. For example, suppose we wanted to model dependencies between just 100 binary features conditioned on a class label. This would require estimating probabilities for $$2^{100}$$ possible feature combinations per class - an astronomically large number (<small>$$1,2676506002×10^{30}$$</small>). Even for continuous features, estimating a full, multivariate distribution requires computing high-dimensional covariance matrices, and ensuring they are invertible and well-conditioned. These tasks are computationally expensive and statistically fragile unless we have massive datasets.
 
 This is known as the [curse of dimensionality](https://www.datacamp.com/blog/curse-of-dimensionality-machine-learning): as the number of dimensions (features) increases, the amount of data required to reliably estimate densities increases exponentially. In practice, we rarely have enough data to estimate these complex joint distributions without overfitting or introducting heavy regularization.
 
 ### The "naive" simplification
 
-
-
 The "naive" assumption circumvents this by treating each feature as conditionally independent given the class label:
 
-$$P(e_1, e_2,\dots,e_n\vert y) = \prod\limits_{i=1}^n P(e_i\vert H)\cdot P(H)$$
+$$P(e_i\vert H\cap e_1\cap\dots\cap e_{i-1}\cap e_{i+1}\cap\dots\cap e_n) = P(e_i\vert H)$$
+
+, and for all $$i$$ this relation is simplified to:
+
+$$P(H\vert e_1\cap\dots\cap e_n) = \frac{P(H)\cdot\prod\limits_{i=1}^n P(e_i | H)}{P(e_1\cap\dots\cap e_n)}$$
+
+The denominator normalizes the nominator, and **integrates over all possible class labels**, since it does not depend on $$H$$ to be computed - i.e. it doesn't affect which class has the highest probability. So we can rewrite the classification rule using just the numerator:
+
+$$P(H\vert e_1\cap\dots\cap e_n) \varpropto P(H)\cdot\prod\limits_{i=1}^n P(e_i | H)$$
+
+, and we can use $$\arg \max$$ to find the class that **gives the highest posterior probability** for feature vector $$\vec{x}$$:
+
+$$\hat{y}=\arg \max_{y} P(y)\cdot\prod\limits_{i=1}^n P(x_i | y)$$
+
+Estimating the posterior probabilities from training data is done via **Maximum A Posteriori (MAP) estimation**. $$P(y)$$ is estimated as the relative frequency of class $$y$$ in the training set, and each $$P(x_i\vert y)$$ is estimated based on feature distributions in each class.
+
+Under the hood, it computes $$P(y)\cdot\prod\limits_{i=1}^n P(x_i \vert y)$$ for every class $$y$$, and normalizes the results so they sum to $$1$$.
+
+### Why does it work?
+
+Naive Bayes often performs surprisingly well in practice, despite its unrealistic independence assumptions. This is because accurate probability estimates are not always required for good classification. What matters is that the decision boundary induced by comparing class scores remains useful. Even when the probabilities themselves are not well calibrated. As long as the incorrect independence assumption does not lead to systematically biased scores, the final predictions can still be highly effective.
+
+This is why Naive Bayes is often described as
+
+> "wrong, but useful" - A pragmatic trade-off between statistical realism and computational simplicity.
+
+We have to be **cautious with correlations between features** though, since it breaks down our feature independence assumption, and the model exaggerates or underrepresents the true likelihood, and performance degrades.
+
+### Conclusion
+
+The naive assumption clearly oversimplifies reality. In most real-world datasets, features are not truly independent. However, the simplification offers practical benefits:
+
+- **Tractability**: We only have to estimate one univariate distribution per feature per class.
+- **Sample efficiency**: We need far fewer samples to get reliable estimates of the probability distributions for each class.
+- **Speed**: The classifier becomes fast to train and evaluate.
+
+## From assumptions to implementations: Handling continuous features
+
+At the heart of Naive Bayes lies a simplifying assumption: All features are conditionally independent given the class label, but in order to **compute** the individual terms $$P(x_i \vert y)$$, we have to make assumptions about each features' distribution. This is where we can use different Naive Bayes variants. The assumptions remain the same, but the difference is the way the individual probabilities for each $$x_i$$ is computed.
+
+- if $$x_i$$ is **categorical**, we use **frequency counts** (Multinominal or Bernoulli NB).
+- if $$x_i$$ is **continuous**, we cannot count how often each exact value occurs, since real-valued features are rarely repeated exactly, and this problem grows when the precision (e.g. measurement) increases.
+
+The latter leads us to a natural solution: **Assume a probability distribution over the feature values**.
+
+### Gaussian Naive Bayes Classifier
+
+The Gaussian or normal distribution is a natural choice, since:
+
+- The Central Limit Theorem since many features tend to be approximately normal.
+- Simplicity: A normal distribution is described with only the **mean** and **variance**.
+- Mathematical convenience (e.g. closed-form likelihood, stability under transformations, computationally cheap)
+
+For each class $$y$$, we model each continuous feature $$x_i$$ with a Gaussian distribution:
+
+$$P(x_i\vert y=c)=\frac{1}{\sqrt{2\pi\sigma_{ic}^2}}\exp(-\frac{(x_i - \mu_{ic})^2}{2\sigma_{ic}^2}$$
+
+, where
+
+- $$P(y = c) = \frac{\text{n class c samples}}{\text{total samples}}$$.
+- $$\mu_{ic}=\frac{1}{N_c}\sum\limits_{j=1}^{N_c}X_{i}^{(j)}$$, where
+    - $$\mu_{ic}$$ is the average value of feature $$x_i$$ across all samples in class $$c$$.
+    - $$N_c$$: the number of training samples belonging to class $$c$$
+    - $$X_{i}^{(j)}$$: the value of the $$i^{th}$$ feature in the $$j^{th}$$ training sample of class $$c$$
+- $$\sigma_{ic}^2=\frac{1}{N_c}\sum\limits_{j=1}^{N_c}(X_{i}^{(j)} - \mu_{ic})^2$$, where
+    - $$\sigma_{ic}^2$$ is the variance of feature $$x_i$$ for class $$c$$, and computed with
+    - $$N_c$$: the number of training samples belonging to class $$c$$
+    - $$X_{i}^{(j)}$$: the value of the $$i^{th}$$ feature in the $$j^{th}$$ training sample of class $$c$$
+
+The formula describes the familiar **bell curve**, centered at $$\mu_{i,y}$$
+
+![Gaussian or Normal distribution plot](/images/normal_distribution.png)
+
+<small>Image by [RMIT University](https://learninglab.rmit.edu.au/maths-statistics/statistics/s10-standard-normal-distribution)
+
+
+The Gaussian assumption turns Naive Bayes into a [parametric model](https://en.wikipedia.org/wiki/Parametric_model), a family of probability distributions with a finite number of parameters, where we estimate the **mean** and **variance** of each feature within each class using training data.
