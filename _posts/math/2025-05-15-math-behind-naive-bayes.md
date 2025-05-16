@@ -97,7 +97,7 @@ And compute the likelihoods:
 
 - If the car is behind door No. 1, $$H_1$$, Monty could randomly choose door No. 2 or 3. $$\Rightarrow P(e\vert H_1)=\frac{1}{2}$$.
 - If the car is behind door No. 2, $$H_2$$, Monty could only pick door No. 3, since we picked the first already $$\Rightarrow P(e\vert H_2)=1$$.
-- If the car is behind door No. 3, $$H_3$$, Monty would not open the door and reveal the car $$\Rightarrow P(e\vert H_3)=0$$
+- If the car is behind door No. 3, $$H_3$$, Monty could not open the door, since it reveals the car $$\Rightarrow P(e\vert H_3)=0$$
 
 With the likelihoods computed, we now move forward to calculate the marginal probability, $$P(E)$$, or normalization constant.
 
@@ -107,13 +107,13 @@ $$\Rightarrow (\frac{1}{2}\cdot\frac{1}{3})+(1\cdot\frac{1}{3})+(0\cdot\frac{1}{
 
 $$=\frac{1}{6}+\frac{1}{3}=\frac{3}{6}=\frac{1}{2}$$
 
-Finally, we compute posteriors
+Finally, we compute posteriors for hypothesis 1
 
 $$P(H_1\vert e) =\frac{P(e\vert H_1)P(H_1)}{P(e)}$$
 
 $$\Rightarrow \frac{\frac{1}{2}\cdot\frac{1}{3}}{\frac{1}{2}}=\frac{\frac{1}{6}}{\frac{1}{2}}=\frac{1}{3}$$
 
-And
+And hypothesis 2
 
 $$P(H_2\vert e) =\frac{P(e\vert H_2)P(H_2)}{P(e)}$$
 
@@ -130,3 +130,117 @@ The Monty Hall Problem demonstrates how Bayesian updating works:
 - Normalize and update beliefs accordingly
 
 It also challenges our intuition and why probabilistic reasoning is essential in making better decisions.
+
+## From Bayes to Naive Bayes
+
+Bayes' Theorem offers a formal way of updating our beliefs given new evidence. However, applying it directly in real-world classification tasks often becomes computationally intractable, especially dealing with high-dimensional data where we want to **estimate the joint probability distribution** $$P(x_1, x_2, \dots,x_n\vert y)$$. It's the [combinatorial explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion), where the number of possible combinations of feature values grows exponentially with the number of features.
+
+### A Quick Primer: Independent vs. Conditionally Independent Events
+Let’s break down the concepts of **independence** and **conditional independence**, as they’re crucial for understanding the _"naivety"_ in Naive Bayes.
+
+#### Independent events
+
+Two events, $$A$$ and $$B$$, are **independent** if the occurrence of one has no effect on the probability of the other:
+
+$$P(A\cap B)=P(A)\cdot P(B)$$
+
+Or, equivalently:
+
+$$P(A\vert B) = P(A)$$
+
+and
+
+$$P(B\vert A) = P(B)$$
+
+##### Example: Tossing two fair coins; The result of the first toss doesn’t affect the second.
+
+![Quarter dollar head and tail](/images/fair_coin.jpg)
+<small>Image by [Great American Coin Co.](https://www.greatamericancoincompany.com/cdn/shop/articles/front-and-back_a6e2bed8-21a7-4f3f-b765-7ddf3570a7d7.jpg?v=1736183719&width=1400)</small>
+
+When
+- $$A=\{x\vert x = \text{first coin is heads}\}$$, and
+- $$B=\{x\vert x = \text{second coin is heads}\}$$,
+
+Then
+
+$$P(A\cap B)=P(A)\cdot P(B) = \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$$
+
+#### Conditional independent events
+
+Two events $$A$$ and $$B$$ are **conditionally independent given a third event $$C$$** if, once we know $$C$$ has occurred, learning about $$A$$ gives us **no additional information about $$B$$**, and vice-versa. In other words, once we know the _"cause"_, the symptoms are treated as **independent**.
+
+Formally:
+
+$$P(A\cap B\vert C)=P(A\vert C)\cdot P(B\vert C)$$
+
+Or, equivalently:
+
+$$P(A\vert B, C)=P(A\vert C)$$
+
+and
+
+$$P(B\vert A, C)=P(B\vert C)$$
+
+##### Example: Spam Email classifier
+
+Let's say we're building a spam email classifier, where:
+
+- $$C$$: Email is `spam` or `not spam`
+- $$A$$: Email contains the word _"Viagra"_
+- $$B$$: Email contains the words _"Money-back guarantee"_
+
+In general, the presence of the words _"Viagra"_, and _"Money-back guarantee"_ might be correlated, since spammy phrases often appear together. Knowing the presence of $$A$$ might increase the likelihood of $$B$$. This means that both events are _dependent_ in isolation.
+
+But here's the key. Once we conditioned on $$C$$ (email is `spam`), the presence of $$A$$ no longer gives us new infromation on the likelihood of $$B$$. Why? Both events are already explained by the fact the email is spam. The common cause $$C$$ makes the co-occurrence of the symptoms more likely.
+
+In other words,
+
+> Once we know that an email is spam, it does not matter wheter $$A$$ and $$B$$ often appear together in general. The only relevant question is how likely each word appears in spam emails?
+
+So $$A$$ and $$B$$ become conditionally independent given $$C$$. This is the **Naive Bayes assumption** in action. It's what allows the model to break down complex joint probabilities into simpler, individual conditional probabilities (one per feature).
+
+## The "Naive" assumption
+
+Now that we understand how Bayes' Theorem updates our beliefs given evidence, we face a practical question:
+
+> How do we estimate $$P(e\vert H)$$ when $$e$$ is a high-dimensional feature vector?
+
+Given the hypothesis $$H$$, and dependent feature (or evidence) vector $$\begin{bmatrix}e_1 & \dots & e_n\end{bmatrix}$$, Bayes' Theorem states:
+
+$$P(H\vert e_1, \dots, e_n) = \frac{(e_1, \dots, e_n \vert H)\cdot P(H)}{P(e_1, \dots, e_n)}$$
+
+In high-dimensional spaces, modelling the full joint probability distribution $$P(e_1, e_2,\dots,e_n\vert H)$$ becomes often computationally intractable, especially with limited training data.
+
+### Why is it hard?
+
+The number of parameters required to model a joint distribution grows **exponentially** with the number of features in a dataset. For example, suppose we wanted to model dependenceis between just 100 binary features conditioned on a class label. This would require estimating probabilities for $$2^{100}$$ possible feature combinations per class - an astronomically large number (<small>$$1,2676506002×10^{30}$$</small>). Even for continuous features, estimating a full, multivariate distribution requires computing high-dimensional covariance matrices, and ensuring they are invertible and well-conditions. These tasks are computationally expensive and statistically fragile unless we have massive datasets.
+
+This is known as the [curse of dimensionality](https://www.datacamp.com/blog/curse-of-dimensionality-machine-learning): as the number of dimensions (features) increases, the amount of data required to reliably estimate densities increases exponentially. In practice, we rarely have enough data to estimate these complex joint distributions without overfitting or introducting heavy regularization.
+
+### The "naive" simplification
+
+
+
+The "naive" assumption circumvents this by treating each feature as conditionally independent given the class label:
+
+$$P(e_1, e_2,\dots,e_n\vert y) = \prod\limits_{i=1}^n P(e_i\vert H)\cdot P(H)$$
+
+
+
+
+
+
+
+
+
+
+### The Naive in Naive Bayes
+To sidestep this complexity, Naive Bayes introduces a powerful assumption:
+
+> All features are conditionally independent given the class label.
+
+In other words, once we know the class (e.g., Iris setosa or Iris versicolor), the value of one feature (like petal length) tells us nothing about another feature (like sepal width). Mathematically, this assumption simplifies the joint distribution into a product of individual probabilities:
+
+$$P(x_1, x_2, \dots,x_n\vert y) = P(x_1\vert y)\cdot P(x_1\vert y)\cdot\dots\cdot P(x_n\vert y)$$
+
+This simplification reduces computational complexity and makes it feasible to apply Bayes' Theorem in high-dimensional spaces.
