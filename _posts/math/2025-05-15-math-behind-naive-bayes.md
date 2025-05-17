@@ -259,42 +259,94 @@ The naive assumption clearly oversimplifies reality. In most real-world datasets
 
 ## From assumptions to implementations: Handling continuous features
 
-At the heart of Naive Bayes lies a simplifying assumption: All features are conditionally independent given the class label, but in order to **compute** the individual terms $$P(x_i \vert y)$$, we have to make assumptions about each features' distribution. This is where we can use different Naive Bayes variants. The assumptions remain the same, but the difference is the way the individual probabilities for each $$x_i$$ is computed.
+At the heart of Naive Bayes thus lies a simplifying assumption: All features are conditionally independent given the class label, but in order to **compute** the individual terms $$P(x_i \vert y)$$, we have to make assumptions about each features' distribution. This is where we can use different Naive Bayes variants. The assumptions remain the same, but the difference is the way the individual probabilities for each $$x_i$$ is computed.
 
 - if $$x_i$$ is **categorical**, we use **frequency counts** (Multinominal or Bernoulli NB).
 - if $$x_i$$ is **continuous**, we cannot count how often each exact value occurs, since real-valued features are rarely repeated exactly, and this problem grows when the precision (e.g. measurement) increases.
 
-The latter leads us to a natural solution: **Assume a probability distribution over the feature values**.
+The latter leads us to a natural solution: **Assume a probability distribution over the feature values**. Enter the Gaussian Naive Bayes classifier.
 
 ### Gaussian Naive Bayes Classifier
-
-The Gaussian or normal distribution is a natural choice, since:
-
-- The Central Limit Theorem since many features tend to be approximately normal.
-- Simplicity: A normal distribution is described with only the **mean** and **variance**.
-- Mathematical convenience (e.g. closed-form likelihood, stability under transformations, computationally cheap)
-
-For each class $$y$$, we model each continuous feature $$x_i$$ with a Gaussian distribution:
-
-$$P(x_i\vert y=c)=\frac{1}{\sqrt{2\pi\sigma_{ic}^2}}\exp(-\frac{(x_i - \mu_{ic})^2}{2\sigma_{ic}^2}$$
-
-, where
-
-- $$P(y = c) = \frac{\text{n class c samples}}{\text{total samples}}$$.
-- $$\mu_{ic}=\frac{1}{N_c}\sum\limits_{j=1}^{N_c}X_{i}^{(j)}$$, where
-    - $$\mu_{ic}$$ is the average value of feature $$x_i$$ across all samples in class $$c$$.
-    - $$N_c$$: the number of training samples belonging to class $$c$$
-    - $$X_{i}^{(j)}$$: the value of the $$i^{th}$$ feature in the $$j^{th}$$ training sample of class $$c$$
-- $$\sigma_{ic}^2=\frac{1}{N_c}\sum\limits_{j=1}^{N_c}(X_{i}^{(j)} - \mu_{ic})^2$$, where
-    - $$\sigma_{ic}^2$$ is the variance of feature $$x_i$$ for class $$c$$, and computed with
-    - $$N_c$$: the number of training samples belonging to class $$c$$
-    - $$X_{i}^{(j)}$$: the value of the $$i^{th}$$ feature in the $$j^{th}$$ training sample of class $$c$$
-
-The formula describes the familiar **bell curve**, centered at $$\mu_{i,y}$$
 
 ![Gaussian or Normal distribution plot](/images/normal_distribution.png)
 
 <small>Image by [RMIT University](https://learninglab.rmit.edu.au/maths-statistics/statistics/s10-standard-normal-distribution)
 
 
-The Gaussian assumption turns Naive Bayes into a [parametric model](https://en.wikipedia.org/wiki/Parametric_model), a family of probability distributions with a finite number of parameters, where we estimate the **mean** and **variance** of each feature within each class using training data.
+The Gaussian distribution is a natural choice, since:
+
+- The Central Limit Theorem since many features tend to be approximately normal.
+- Simplicity: A normal distribution is described with only the **mean** and **variance**.
+- Mathematical convenience (e.g. closed-form likelihood, stability under transformations, computationally cheap)
+
+It is defined for a **continuous variable $$x$$** with:
+
+- **Mean $$\mu$$**: The center of the distribution
+- **Variance $$\sigma^2$$**: The spread of the data - i.e. distance from the mean
+
+#### Probability density function (PDF)
+
+We can use the **probability density function (PDF)** to compute the probability of $$x$$ comes from a Gaussian distribution with a given $$\mu$$, and $$\sigma^2$$:
+
+$$P(x_i\vert y) = \frac{1}{\sqrt{2\pi\sigma_{ic}^2}}\cdot\exp(-\frac{(x_i - \mu_{ic})^2}{2\sigma_{ic}^2}$$
+
+
+#### First term: the normalization constant
+
+$$\frac{1}{\sqrt{2\pi\sigma_{ic}^2}}$$
+
+In probability theory, a **PDF** describes how likely a continuous random variable is to take on a value in a given range, but, unlike discrete probabilities, where probabilities like $$P(x=3)$$ are directly meaningful, continuous variables don't work that way.
+
+Instead, the probability that a continuous variable fall within a range $$[a,b]$$ is given by **the area under the curve of the PDF between $$a$$ and $$b$$**.
+
+$$P(a \leq x \leq b) = \int_{b}^{a}f(x)dx$$
+
+To be a valid PDF, it must satisfy one crucial condition:
+
+> The **total area under the curve** across the entire real number line must equal 1.
+
+That is
+
+$$\int_{\infty}^{-\infty}f(x)dx=1$$
+
+This renders the distribution **properly normalized** over all real numbers.
+
+#### Second term: exponential decay
+
+$$\exp(-\frac{(x_i - \mu_{ic})^2}{2\sigma_{ic}^2})$$
+
+The exponential term controls **the shape of the bell curve** - i.e. the kurtosis (how _"tall"_ or _"flat"_ is the distribution around $$\mu$$?). It is called **exponential decay**, since, as $$x$$ moves away from $$\mu$$, this term **rapidly decreases toward zero**.
+
+##### Decoding the terms
+
+- $$(x - \mu)$$: Measures the distance of $$x$$ from $$\mu$$
+- $$(x - \mu)^2$$: (squared distance): Ensures this value is always positive, and the larger the distance, the larger the value becomes.
+- $$(2\sigma^2)$$: Scales the squared distance. The larger $$\sigma$$, the more _"forgiving"_ the distribution is of being far from the mean.
+- $$-\frac{(x_i - \mu_{ic})^2}{2\sigma_{ic}^2}$$ (negative sign): This makes the exponent negative, so as the distance increases, the exponent **decays**.
+- $$\exp$$: Converts the scaled squared distance into a value between 0 and 1 - i.e. a probability estimate.
+
+The expontential decay models the likelihood $$x$$ appears in a Gaussian-distributed class $$y$$.
+
+- When $$x$$ is **close to the class mean**, the exponent is near 0 - i.e. high probability
+- When $$x$$ is **far from the class mean**, the exponent becomes strongly negative - i.e. probability shrinks toward 0.
+
+This makes the model **sensitive to deviations from the class-specific mean**, which is what allows Gaussian Naive Bayes to perform classification based on how well a value fits into the distribution learned for each class.
+
+## Mathematical Optimizations in Gaussian Naive Bayes
+
+When implementing Gaussian Naive Bayes, several mathematical optimizations are employed to **improve both numerical stability and computational efficiency**. The underlying probability theory remains unchanged but the optimizations make the model more robust and scalable (with high-dimensional or sparse data in particular).
+
+### Log probabilities
+
+In the prediction phase, we use
+
+$$P(y=c\vert x)\varpropto P(y=c)\cdot\prod\limits_{i=1}^n P(x_i | y=c)$$
+
+However, multiplying many small probabilities can quickly lead to [numerical underflow](https://en.wikipedia.org/wiki/Arithmetic_underflow), where the product becomes so small that it rounds to zero in floating-point representation. It becomes a number of more precise absolute value than the computer can actually represent in memory on its central processing unit (CPU).
+
+**Optimization**: Apply the natural [logarithm]({% link _posts/math/2025-05-14-logarithms-beginners-guide.md %}) to the entire expression. Since the logarithm is a monotonically increasing function, maximizing the log of the probabilities yields the same result as maximizing the original product:
+
+$$\hat{y}=\arg \max_{c} \biggl( \log P(y=c)\cdot\sum\limits_{i=1}^n \log P(x_i | y=c)\biggl)$$
+
+This transformation avoids numerical underflow and ensures robust computation.
+
