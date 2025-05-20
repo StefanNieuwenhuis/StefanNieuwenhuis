@@ -6,8 +6,9 @@ series: "Gaussian Naive Bayes Classifier"
 series_part: 2
 ---
 
+{% include _series.html %}
 
-In this second part of the series, we dive into the mathematics behind Gaussian Naive Bayes. We'll derive the class-conditional probability density functions, explore why log-probabilities are used, and show how the entire prediction process can be transformed into a fast, vectorized dot-product computation. Along the way, we'll clarify common assumptions—such as constant variance across classes—and examine their practical consequences.
+In the second part of the series, we dive into the mathematics behind Gaussian Naive Bayes. We'll derive the class-conditional probability density functions, explore why log-probabilities are used, and show how the entire prediction process can be transformed into a fast, vectorized dot-product computation. Along the way, we'll clarify common assumptions—such as constant variance across classes—and examine their practical consequences.
 
 ## From Bayes to Naive Bayes
 

@@ -6,6 +6,8 @@ series: "Gaussian Naive Bayes Classifier"
 series_part: 1
 ---
 
+{% include _series.html %}
+
 This is the first part of a multi-part series on Gaussian Naive Bayes, a simple yet surprisingly effective probabilistic classifier. In this post, we’ll explore the foundational concepts behind Bayes’ Theorem and how they apply to machine learning. We’ll also introduce the Naive Bayes assumption, setting the stage for a deeper mathematical dive in the next post.
 
 In the ever-growing landscape of machine learning algorithms, Naive Bayes stands out due to its elegant probabilistic foundation and surprising effectiveness in various practical applications, especially in text classification and medical diagnosis. Gaussian Naive Bayes, in particular, is a variant tailored for continuous data, assuming a Gaussian distribution for each feature conditioned on the class.
@@ -130,4 +132,4 @@ It also challenges our intuition and why probabilistic reasoning is essential in
 
 ## Conclusion
 
-We've seen how Bayes' Theorem provides a probabilistic framework for classification and how the _"naive"_" assumption simplifies modeling joint distributions. In Part 2, we’ll dive deeper into the mathematical formulation of Gaussian Naive Bayes, including how log-probabilities, vectorization, and variance assumptions impact efficiency and accuracy.
+We've seen how Bayes' Theorem provides a probabilistic framework for classification and how the _"naive"_" assumption simplifies modeling joint distributions. In [Part 2]({% link _posts/math/2025-05-19-math-behind-naive-bayes-part2.md %}), we’ll dive deeper into the mathematical formulation of Gaussian Naive Bayes, including how log-probabilities, vectorization, and variance assumptions impact efficiency and accuracy.
