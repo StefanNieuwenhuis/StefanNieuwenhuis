@@ -1,22 +1,42 @@
+# Theme and Skin
 remote_theme: "mmistakes/minimal-mistakes@master"
-minimal_mistakes_skin: "default" # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin: "default"
 
-search: true
-
-# site settings
-locale: "en-US"
+# Site settings
 title: "Stefan Nieuwenhuis"
 name: &name "Stefan Nieuwenhuis"
 description: "Learning in public – one system at a time."
-baseurl: ""
+locale: "en-US"
+baseurl: ""  # Leave empty if hosted at root of the GitHub Pages site
 url: "https://stefannieuwenhuis.github.io"
+search: true
+
+
+# Plugins allowed by GitHub Pages
 plugins:
   - jekyll-feed
-  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-include-cache
-  - jekyll-image-size
+  - jekyll-remote-theme
+
+# Optional (used by some layouts)
+markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
+
+# Math support
+mathjax: true
+
+# Analytics
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-Q3FZDP5YBX"
+    anonymize_ip: true
+
+# Collections
 collections:
   posts:
     output: true
@@ -24,47 +44,35 @@ collections:
     output: true
     permalink: /:collection/:path/
 
+# Archives
 category_archive:
   type: liquid
   path: /categories/
-
 tag_archive:
   type: liquid
   path: /tags/
 
+# Defaults for layouts
 defaults:
-  # _posts
   - scope:
       path: ""
       type: posts
     values:
       layout: single
+      author: stefan
       author_profile: true
       read_time: true
       share: true
       related: true
-  # _recsys
+
   - scope:
       path: ""
       type: recsys
     values:
       layout: single
+      author: stefan
       author_profile: false
       share: true
 
-markdown: kramdown
-kramdown:
-  input: GFM
-  math_engine: mathjax
-
+# Pages directory
 include: ["_pages"]
-
-# Enable MathJax
-mathjax: true
-
-# Analytics
-analytics:
-  provider               : "google-gtag" # false (default), "google", "google-universal", "google-gtag", "custom"
-  google:
-    tracking_id          : "G-Q3FZDP5YBX"
-    anonymize_ip         : true #true, false (default)

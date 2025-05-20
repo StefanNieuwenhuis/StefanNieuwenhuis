@@ -1,0 +1,18 @@
+{% assign series_name = page.series %}
+{% if series_name %}
+<div class="series-box">
+    <h3>Series: {{ series_name }}</h3>
+    <ul>
+        {% assign series_posts = site.posts | where: "series", series_name | sort: "date" %}
+        {% for post in series_posts %}
+        <li>
+            {% if post.url == page.url %}
+            <strong>{{ post.title }}</strong>
+            {% else %}
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
