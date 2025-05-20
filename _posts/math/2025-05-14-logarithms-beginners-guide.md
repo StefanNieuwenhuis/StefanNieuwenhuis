@@ -32,9 +32,9 @@ $$\log_{10}(100) = 2$$
 
 ## Breaking it down
 
-![Exponents versus Logarithms](/images/Exponent_vs_Logarithm.png){: width="500" }
+![Exponents versus Logarithms](/assets/images/Exponent_vs_Logarithm.png){: width="500" }
 
-{% imagesize /images/Exponent_vs_Logarithm.png:opengraph?width=500&height=100 alt='Exponents versus Logarithms' %}
+{% imagesize /assets/images/Exponent_vs_Logarithm.png:opengraph?width=500&height=100 alt='Exponents versus Logarithms' %}
 
 Here, $$\log$$ stands for logarithm. The right side part of the arrow is read to be _"Logarithm of $$x$$ to the base $$b$$ is equal to $$a$$"_.
 
@@ -67,7 +67,7 @@ Continuous multiplicative growth quickly outpaces our ability to model or interp
 
 In other words, logarithms **linearize exponential growth**: They _"compress"_ fast-growing data into a scale we can handle more easily.
 
-![Comparing Exponential, Linear, and Logarithmic Curves](/images/Comparing_Exponential_Linear_Logarithmic_Curves.png){: width="1500" }
+![Comparing Exponential, Linear, and Logarithmic Curves](/assets/images/Comparing_Exponential_Linear_Logarithmic_Curves.png){: width="1500" }
 
 For an interactive version of this image, see [GeoGebra](https://www.geogebra.org/graphing/ppgejxu5)
 
