@@ -282,4 +282,4 @@ Transforming probability products into log-space not only prevents numerical und
 
 Ultimately, these optimizations aren't just about speed or safety — they reflect a mature understanding of how theoretical models meet the real-world imperfections of data and hardware. Whether you're building a scalable classifier or exploring probabilistic reasoning, mastering these principles ensures your models are not only correct, but robust, interpretable, and production-ready.
 
-In the next and final part, we’ll implement these ideas in Python using scikit-learn, visualize decision boundaries, and compare theoretical insights with empirical results.
+In the next and final part, we’ll implement these ideas in Python, visualize decision boundaries, and compare theoretical insights with empirical results.
