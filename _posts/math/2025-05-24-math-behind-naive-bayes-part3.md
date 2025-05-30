@@ -70,7 +70,7 @@ Now that we have refreshed our mathematics, we can start implementing. Let's wal
 import numpy as np
 
 # Typings
-from typing import Self
+from typing import Self, Any
 from numpy.typing import NDArray
 
 ```
@@ -190,7 +190,7 @@ def __compute_log_prior_probabilities(self, y: NDArray) -> Self:
 ```
 <br/>
 ```python
-def __compute_log_likelihood_constants(self, X, y, epsilon: np.int64) -> Self:
+def __compute_log_likelihood_constants(self, X: NDArray, y: NDArray, epsilon: np.int64) -> Self:
     """
     Compute log-likelihood constants for feature matrix X
 
@@ -230,12 +230,12 @@ def __compute_log_likelihood_constants(self, X, y, epsilon: np.int64) -> Self:
     sums_of_squares = mask @ X_squared
 
     # Compute variances = E[x^2] - (E[x])^2 + ϵ
-    variances = (sums_squared / counts) - (thetas ** 2) + epsilon
+    variances = (sums_of_squares / counts) - (thetas ** 2) + epsilon
 
     # With thetas and variances computed, we can pre-compute the log-likelihood constants
     self.class_curvature_ = -0.5 / variances
-    self.class_mean_pull_ = theta / variances
-    self.class_log_likelihood_consts_ = -0.5 * np.log(2 * np.pi * variances) - (theta ** 2) / (2 * variances)
+    self.class_mean_pull_ = thetas / variances
+    self.class_log_likelihood_consts_ = -0.5 * np.log(2 * np.pi * variances) - (thetas ** 2) / (2 * variances)
 
     return self
 
@@ -338,8 +338,9 @@ def predict(self, X: NDArray) -> NDArray:
     C: nd.array of shape (n_classes, )
         Classification results vector
     """
+    joint_log_likelihood = self.__compute_joint_log_likelihood(X)
 
-    return np.argmax(total_log_likelihood, axis=1)
+    return np.argmax(joint_log_likelihood, axis=1)
 
 ```
 
